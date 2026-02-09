@@ -1,0 +1,100 @@
+name: ImgUpload V2 CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # PHP Syntax Check
+  php-lint:
+    name: PHP Lint Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: php-parallel-lint/php-parallel-lint
+      
+      - name: Run PHP Lint
+        run: |
+          find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+  # JavaScript Check
+  js-lint:
+    name: JavaScript Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Check JavaScript syntax
+        run: |
+          for file in $(find . -name "*.js" -type f); do
+            node --check "$file" || exit 1
+          done
+
+  # Security Check
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check for sensitive files
+        run: |
+          # Ensure .env is not committed
+          if [ -f ".env" ]; then
+            echo "Warning: .env file found in repository"
+          fi
+          
+          # Check .gitignore exists
+          if [ ! -f ".gitignore" ]; then
+            echo "Warning: .gitignore file not found"
+          fi
+
+  # Deploy (only on main branch push)
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [php-lint, js-lint]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy notification
+        run: |
+          echo "✅ All checks passed!"
+          echo "📦 Ready to deploy to production"
+          echo "🌐 Target: ImgUpload V2"
+      
+      # FTP Deploy (uncomment and configure if needed)
+      # - name: FTP Deploy
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USERNAME }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     server-dir: /public_html/
+      #     exclude: |
+      #       **/.git*
+      #       **/.git*/**
+      #       **/node_modules/**
+      #       .env
+      #       .env.example

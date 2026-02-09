@@ -1,0 +1,15 @@
+# User specified ignores
+/Imgur_UploadV2/
+.env
+core/
+*.rar
+*.zip
+
+# Standard ignores
+.git
+.vscode
+.idea
+vendor/
+node_modules/
+*.log
+*.tmp
