@@ -84,17 +84,17 @@ jobs:
           echo "📦 Ready to deploy to production"
           echo "🌐 Target: ImgUpload V2"
       
-      # FTP Deploy (uncomment and configure if needed)
-      # - name: FTP Deploy
-      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      #   with:
-      #     server: ${{ secrets.FTP_SERVER }}
-      #     username: ${{ secrets.FTP_USERNAME }}
-      #     password: ${{ secrets.FTP_PASSWORD }}
-      #     server-dir: /public_html/
-      #     exclude: |
-      #       **/.git*
-      #       **/.git*/**
-      #       **/node_modules/**
-      #       .env
-      #       .env.example
+      # FTP Deploy
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
+            .env.example
