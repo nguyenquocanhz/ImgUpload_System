@@ -1,3 +1,27 @@
+<!-- Sponsor Banner -->
+<section class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 py-4">
+    <div class="max-w-7xl mx-auto px-4">
+        <a href="https://123host.vn/hosting-mien-phi.html?utm_source=INV&utm_medium=FHREF&utm_campaign=132016"
+            target="_blank" rel="noopener sponsored"
+            class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 text-white group">
+            <div class="flex items-center gap-2">
+                <i data-lucide="server" class="w-5 h-5 text-yellow-300"></i>
+                <span class="text-sm font-medium opacity-80">TÀI TRỢ BỞI</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-lg md:text-xl font-bold">🌐 123HOST.VN</span>
+                <span class="hidden md:inline text-white/80">—</span>
+                <span class="text-sm md:text-base text-white/90">Hosting Miễn Phí cho website của bạn</span>
+            </div>
+            <span
+                class="inline-flex items-center gap-1 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold hover:bg-white/30 transition-all group-hover:scale-105">
+                Đăng ký ngay
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+            </span>
+        </a>
+    </div>
+</section>
+
 <!-- Footer -->
 <footer class="bg-dark text-white">
     <!-- Main Footer -->
