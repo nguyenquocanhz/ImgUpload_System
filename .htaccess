@@ -7,6 +7,14 @@ RewriteEngine On
 RewriteBase /ImgurUploadV2/
 
 # =====================================================
+# SEO - Bot & Sitemap Access
+# =====================================================
+
+# Allow direct access to robots.txt and sitemap.xml
+RewriteRule ^robots\.txt$ - [L]
+RewriteRule ^sitemap\.xml$ - [L]
+
+# =====================================================
 # SEO - Clean URLs
 # =====================================================
 
@@ -76,13 +84,11 @@ RewriteRule ^(.*)/$ /$1 [L,R=301]
     Deny from all
 </FilesMatch>
 
-# Block PHP files in uploads directory (if exists)
-<Directory "uploads">
-    <Files "*.php">
-        Order allow,deny
-        Deny from all
-    </Files>
-</Directory>
+# Block PHP files in uploads directory
+# Note: <Directory> is NOT allowed in .htaccess, use <FilesMatch> or <If> instead
+<IfModule mod_rewrite.c>
+    RewriteRule ^uploads/.*\.php$ - [F,L]
+</IfModule>
 
 # =====================================================
 # GZIP Compression

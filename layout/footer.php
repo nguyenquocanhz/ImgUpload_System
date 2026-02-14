@@ -72,7 +72,7 @@
 </footer>
 
 <!-- Scripts -->
-<script src="/ImgurUploadV2/assets/js/app.js"></script>
+<script src="/assets/js/app.js"></script>
 
 <!-- Additional functions -->
 <script>

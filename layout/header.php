@@ -20,6 +20,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {

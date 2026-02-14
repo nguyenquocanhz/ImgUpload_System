@@ -6,14 +6,26 @@ function getApiKey() {
 function saveApiKey() {
     const apiKey = document.getElementById('apiKeyInput').value.trim();
     if (!apiKey) {
-        alert('Vui lòng nhập API key!');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Thiếu API Key',
+            text: 'Vui lòng nhập API key!',
+            confirmButtonColor: '#0d6efd'
+        });
         return;
     }
     
     localStorage.setItem('imgbb_api_key', apiKey);
     updateApiKeyStatus();
     closeApiKeyModal();
-    alert('Đã lưu API key thành công!');
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: 'Đã lưu API key thành công!',
+        confirmButtonColor: '#0d6efd',
+        timer: 2000,
+        timerProgressBar: true
+    });
 }
 
 function updateApiKeyStatus() {
@@ -39,6 +51,31 @@ function updateApiKeyStatus() {
     }
     // Re-initialize icons for the new content
     if (window.lucide) lucide.createIcons();
+}
+
+// Check API Key on page load - show SweetAlert if not configured
+function checkApiKeyOnLoad() {
+    const apiKey = getApiKey();
+    if (!apiKey) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Chưa cấu hình API Key',
+            html: `
+                <p class="mb-2">Bạn cần cấu hình <strong>ImgBB API Key</strong> để sử dụng chức năng upload ảnh.</p>
+                <p class="text-sm text-gray-500">Lấy API key miễn phí tại: <a href="https://api.imgbb.com/" target="_blank" class="text-blue-500 underline">api.imgbb.com</a></p>
+            `,
+            confirmButtonText: 'Cấu hình ngay',
+            confirmButtonColor: '#0d6efd',
+            showCancelButton: true,
+            cancelButtonText: 'Để sau',
+            cancelButtonColor: '#6c757d',
+            allowOutsideClick: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                openApiKeyModal();
+            }
+        });
+    }
 }
 
 // Modal Management
@@ -81,8 +118,23 @@ function uploadImage(file) {
     const apiKey = getApiKey();
     
     if (!apiKey) {
-        alert('Vui lòng cấu hình API key trước!');
-        openApiKeyModal();
+        Swal.fire({
+            icon: 'error',
+            title: 'Chưa cấu hình API Key!',
+            html: `
+                <p>Vui lòng cấu hình <strong>ImgBB API Key</strong> trước khi upload.</p>
+                <p class="text-sm text-gray-500 mt-2">Lấy API key miễn phí tại: <a href="https://api.imgbb.com/" target="_blank" class="text-blue-500 underline">api.imgbb.com</a></p>
+            `,
+            confirmButtonText: 'Cấu hình ngay',
+            confirmButtonColor: '#0d6efd',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy',
+            cancelButtonColor: '#6c757d'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                openApiKeyModal();
+            }
+        });
         return;
     }
     
@@ -178,13 +230,23 @@ function uploadImage(file) {
                 }
             } catch (error) {
                 console.error('API Error:', error);
-                alert('Lỗi: ' + error.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi Upload',
+                    text: error.message,
+                    confirmButtonColor: '#0d6efd'
+                });
                 progressText.textContent = 'Lỗi upload!';
                 progressSection.classList.add('hidden');
             }
         } else {
             console.error('Request failed', xhr.status, xhr.statusText);
-            alert('Lỗi kết nối: ' + xhr.statusText);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi kết nối',
+                text: xhr.statusText || 'Không thể kết nối đến server',
+                confirmButtonColor: '#0d6efd'
+            });
             progressText.textContent = 'Lỗi kết nối!';
             progressSection.classList.add('hidden');
         }
@@ -194,7 +256,12 @@ function uploadImage(file) {
     xhr.onerror = function() {
         progressBar.classList.remove('animate-pulse');
         console.error('Network Error');
-        alert('Lỗi mạng! Vui lòng kiểm tra kết nối.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi mạng',
+            text: 'Vui lòng kiểm tra kết nối internet!',
+            confirmButtonColor: '#0d6efd'
+        });
         progressText.textContent = 'Lỗi mạng!';
         progressSection.classList.add('hidden');
     };
@@ -203,7 +270,12 @@ function uploadImage(file) {
     xhr.ontimeout = function() {
         progressBar.classList.remove('animate-pulse');
         console.error('Request timeout');
-        alert('Quá thời gian chờ! Vui lòng thử lại.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Quá thời gian',
+            text: 'Quá thời gian chờ! Vui lòng thử lại.',
+            confirmButtonColor: '#0d6efd'
+        });
         progressText.textContent = 'Quá thời gian!';
         progressSection.classList.add('hidden');
     };
@@ -274,7 +346,12 @@ if (dropZone) {
         if (file && file.type.startsWith('image/')) {
             uploadImage(file);
         } else {
-            alert('Vui lòng chọn file ảnh!');
+            Swal.fire({
+                icon: 'warning',
+                title: 'File không hợp lệ',
+                text: 'Vui lòng chọn file ảnh (JPG, PNG, GIF)!',
+                confirmButtonColor: '#0d6efd'
+            });
         }
     });
 
@@ -312,11 +389,21 @@ function generateVietQR() {
     
     // Validate required fields
     if (!bankId) {
-        alert('Vui lòng chọn ngân hàng!');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Thiếu thông tin',
+            text: 'Vui lòng chọn ngân hàng!',
+            confirmButtonColor: '#0d6efd'
+        });
         return;
     }
     if (!accountNo) {
-        alert('Vui lòng nhập số tài khoản!');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Thiếu thông tin',
+            text: 'Vui lòng nhập số tài khoản!',
+            confirmButtonColor: '#0d6efd'
+        });
         return;
     }
     
@@ -351,7 +438,12 @@ function generateVietQR() {
 
 function downloadVietQR() {
     if (!currentVietQRUrl) {
-        alert('Vui lòng tạo mã QR trước!');
+        Swal.fire({
+            icon: 'info',
+            title: 'Chưa có mã QR',
+            text: 'Vui lòng tạo mã QR trước!',
+            confirmButtonColor: '#0d6efd'
+        });
         return;
     }
     
@@ -367,12 +459,25 @@ function downloadVietQR() {
 
 function copyVietQRLink() {
     if (!currentVietQRUrl) {
-        alert('Vui lòng tạo mã QR trước!');
+        Swal.fire({
+            icon: 'info',
+            title: 'Chưa có mã QR',
+            text: 'Vui lòng tạo mã QR trước!',
+            confirmButtonColor: '#0d6efd'
+        });
         return;
     }
     
     navigator.clipboard.writeText(currentVietQRUrl).then(() => {
-        alert('Đã copy link QR!');
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã copy!',
+            text: 'Đã copy link QR vào clipboard.',
+            confirmButtonColor: '#0d6efd',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
     }).catch(err => {
         console.error('Copy failed:', err);
         // Fallback
@@ -382,13 +487,23 @@ function copyVietQRLink() {
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        alert('Đã copy link QR!');
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã copy!',
+            text: 'Đã copy link QR vào clipboard.',
+            confirmButtonColor: '#0d6efd',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
     });
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     updateApiKeyStatus();
+    // Check API key and show SweetAlert if not configured
+    checkApiKeyOnLoad();
     // Lucide is initialized in header script, but we can call it here too to be sure
     if (window.lucide) lucide.createIcons();
 });

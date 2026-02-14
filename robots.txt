@@ -1,0 +1,13 @@
+# robots.txt - ImgUpload System
+# https://phplab.local/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /core/
+Disallow: /layout/
+Disallow: /.env
+Disallow: /.git/
+Disallow: /.github/
+
+# Sitemap location
+Sitemap: https://phplab.local/sitemap.xml
