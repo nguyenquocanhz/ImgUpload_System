@@ -1,0 +1,24 @@
+name: Deploy to FTP with Git-FTP
+on:
+  push:
+    branches:
+      - main # Chạy khi bạn push code vào nhánh main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Quan trọng: Phải lấy toàn bộ lịch sử commit để git-ftp so sánh được file cũ/mới
+
+      - name: 🚀 Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: 103.97.126.22
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
+          # git-ftp sẽ tự động được kích hoạt nếu bạn không tắt nó
+          # Action này mặc định sử dụng cơ chế so sánh thông minh của Git
