@@ -82,7 +82,7 @@ jobs:
       - name: Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ${{ secrets.FTP_HOST }}
+          server: 103.97.126.22
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/
